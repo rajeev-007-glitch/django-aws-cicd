@@ -4,10 +4,10 @@
 
 ### Solution Overview
 
-    1.	GitHub Actions: Workflow Orchestration tool that will host the Pipeline.
-    2.	IAM OIDC identity provider: Federated authentication service to establish trust between GitHub and AWS to allow GitHub Actions to deploy on AWS without maintaining AWS Secrets and credentials.
-    3.	Amazon S3: Amazon S3 to store the deployment artifacts.
-    4.	AWS Elastic Beanstalk: AWS Elastic Beanstalk is an easy-to-use service for deploying and scaling web applications and services developed with Java, .NET, PHP, Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and IIS.
+1. GitHub Actions: Workflow Orchestration tool that will host the Pipeline.
+2. IAM OIDC identity provider: Federated authentication service to establish trust between GitHub and AWS to allow GitHub Actions to deploy on AWS without maintaining AWS Secrets and credentials.
+3. Amazon S3: Amazon S3 to store the deployment artifacts.
+4. AWS Elastic Beanstalk: AWS Elastic Beanstalk is an easy-to-use service for deploying and scaling web applications and services developed with Java, .NET, PHP, Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and IIS.
 
 ### Prerequisites
 
