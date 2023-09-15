@@ -34,7 +34,7 @@
 Open your chosen command-line interface and clone the repository with the below command to get the project files locally.
 
 ```
-    git clone https://github.com/vinDelphini/django-aws_cicd.git
+git clone https://github.com/vinDelphini/django-aws_cicd.git
 ```
 
 ### IAM user access
@@ -60,60 +60,60 @@ As we save Slack Webhook URL in our github secrets. Settings->Secrets under the 
 Now for creating CI/CD Pipeline in GitHub Action firstly we need to setup a workflow by our self as per shown in image Let's create our first workflow that will contain our build and test jobs. We do that by creating a file with a .yml extension. Let's name this file main.yml Add the content below in the yml file you just created:
 
 ```
-        #Location: .github/workflows/custom_config.yml
+#Location: .github/workflows/custom_config.yml
 
-        name: CI-CD pipeline to AWS
-        env:
-        EB_S3_BUCKET_NAME: "test-django-cicd-bucket-1509"
-        EB_APPLICATION_NAME: "Aws-cicd-django"
-        EB_ENVIRONMENT_NAME: "Aws-cicd-django-env"
-        DEPLOY_PACKAGE_NAME: "django-app-${{ github.sha }}.zip"
-        AWS_REGION_NAME: "ap-northeast-1"
+name: CI-CD pipeline to AWS
+env:
+EB_S3_BUCKET_NAME: "test-django-cicd-bucket-1509"
+EB_APPLICATION_NAME: "Aws-cicd-django"
+EB_ENVIRONMENT_NAME: "Aws-cicd-django-env"
+DEPLOY_PACKAGE_NAME: "django-app-${{ github.sha }}.zip"
+AWS_REGION_NAME: "ap-northeast-1"
 
-        on:
-        push:
-        branches: - master #Use your own branch here (Might be staging or testing)
-        jobs:
-        build:
-        runs-on: ubuntu-latest
-        steps: - name: Git clone on our repo
-        uses: actions/checkout@v2
+on:
+push:
+branches: - master #Use your own branch here (Might be staging or testing)
+jobs:
+build:
+runs-on: ubuntu-latest
+steps: - name: Git clone on our repo
+uses: actions/checkout@v2
 
-            - name: Create zip deployment package
-                run: zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
+    - name: Create zip deployment package
+        run: zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
 
-            - name: Configure AWS credentials
-                uses: aws-actions/configure-aws-credentials@v1
-                with:
-                aws-access-key-id: ${{ secrets.aws_access_key_id }}
-                aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
-                aws-region: ${{ env.AWS_REGION_NAME }}
-            - name: Copying file to S3
-                run: aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.EB_S3_BUCKET_NAME }}/
-            - name: Print nice message on success finish
-                run: echo "CI part finished successfuly"
-
-        deploy:
-        runs-on: ubuntu-latest
-        needs: [build]
-        steps: - name: Configure AWS credentials
+    - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
         aws-access-key-id: ${{ secrets.aws_access_key_id }}
         aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
         aws-region: ${{ env.AWS_REGION_NAME }}
+    - name: Copying file to S3
+        run: aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.EB_S3_BUCKET_NAME }}/
+    - name: Print nice message on success finish
+        run: echo "CI part finished successfuly"
 
-            - name: Create new EBL app ver
-                run: |
-                aws elasticbeanstalk create-application-version \
-                --application-name ${{ env.EB_APPLICATION_NAME }} \
-                --source-bundle S3Bucket="${{ env.EB_S3_BUCKET_NAME }}",S3Key="${{ env.DEPLOY_PACKAGE_NAME }}" \
-                --version-label "${{ github.sha }}"
+deploy:
+runs-on: ubuntu-latest
+needs: [build]
+steps: - name: Configure AWS credentials
+uses: aws-actions/configure-aws-credentials@v1
+with:
+aws-access-key-id: ${{ secrets.aws_access_key_id }}
+aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+aws-region: ${{ env.AWS_REGION_NAME }}
 
-            - name: Deploy new app
-                run: aws elasticbeanstalk update-environment --environment-name ${{ env.EB_ENVIRONMENT_NAME }} --version-label "${{ github.sha }}"
-            - name: Print nice message on success finish
-                run: echo "CD part finished successfuly"
+    - name: Create new EBL app ver
+        run: |
+        aws elasticbeanstalk create-application-version \
+        --application-name ${{ env.EB_APPLICATION_NAME }} \
+        --source-bundle S3Bucket="${{ env.EB_S3_BUCKET_NAME }}",S3Key="${{ env.DEPLOY_PACKAGE_NAME }}" \
+        --version-label "${{ github.sha }}"
+
+    - name: Deploy new app
+        run: aws elasticbeanstalk update-environment --environment-name ${{ env.EB_ENVIRONMENT_NAME }} --version-label "${{ github.sha }}"
+    - name: Print nice message on success finish
+        run: echo "CD part finished successfuly"
 
 ```
 
