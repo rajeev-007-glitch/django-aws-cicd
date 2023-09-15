@@ -43,9 +43,13 @@ Search for IAM users in the AWS console and select [Add user].
 
 ### S3 configuration
 
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/s3-1.png)
+
 ### Setting our Elastic Beanstalk environment.
 
 In the Beanstalk dashboard, make sure you have selected the most suitable region (where services to be deployed) in the right top corner. Check [Environments] and choose [Create a new environment]. Then, on the dialogue page, choose [Web server environment].
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/eb-1.png)
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/eb-2.png)
 
 Fill in the details and focus on Platform section. Here we need to select Python platform (last version) and last Amazon Linux 2 available.
 
@@ -54,6 +58,7 @@ Leave Sample application and hit [Create environment]. In a few moments, you sho
 ### Setup GitHub secrets
 
 As we save Slack Webhook URL in our github secrets. Settings->Secrets under the name. Now, also we need to save our AWS credentials (Access key ID, Secret access key) in github secrets. Settings->Secrets under the name MY_AWS_ACCESS_KEY as well as MY_AWS_SECRET_KEY
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/github-1.png)
 
 ### Build CI/CD Pipeline in GitHub Action to build and deploy the code
 
@@ -122,11 +127,14 @@ aws-region: ${{ env.AWS_REGION_NAME }}
 Now, after any commit changes in code the workflow automatically going to be trigger & job will be start. Push any changes to your specified branch and visit Actions tab. If your actions completed successfully, you would see the green mark. If something went wrong, open the logs, and resolve the errors inside.
 Got errors after successful GitHub Actions run? Visit Elastic Beanstalk environment and check the Logs.
 Hopefully, you'll see something like this:
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/deployment-1.png)
 
 Verify the deployment!
 Code zip successfully uploaded in S3 Bucket
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/s3-2.png)
 
 App is sucessfully up runing. And as we deploy our app on Beanstalk so it take care of all Health check as well traffic handaling & Sacalibity.
+![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/tree/master/data/eb-3.png)
 
 ### Clean up!
 
