@@ -134,6 +134,7 @@ Code zip successfully uploaded in S3 Bucket
 ![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/blob/master/data/s3-2.png)
 
 App is sucessfully up runing. And as we deploy our app on Beanstalk so it take care of all Health check as well traffic handaling & Sacalibity.
+
 ![alt text](https://github.com/rajeev-007-glitch/django-aws-cicd/blob/master/data/eb-3.png)
 
 ### Clean up!
